@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node-gyp rebuild",
+    "docme": "docme README.md",
     "test": "tape test/*.js"
   },
   "repository": {
@@ -16,6 +17,7 @@
     "bindings": "~1.2.1"
   },
   "devDependencies": {
+    "docme": "~0.3.0",
     "nave": "~0.4.3",
     "tap": "~0.4.3"
   },
