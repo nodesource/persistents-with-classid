@@ -1,6 +1,9 @@
 'use strict';
 
-const binding = process._linkedBinding('persistents_with_classid');
+const binding = process.versions.nsolid
+  ? process._linkedBinding('persistents_with_classid')
+  : require('bindings')('persistents_with_classid');
+
 const async_wrap = process.binding('async_wrap');
 
 function getProviderValue(k) { return async_wrap.Providers[k] }
