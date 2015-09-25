@@ -2,6 +2,69 @@
 
 Iterates through all the persistent handles in the current isolate's heap that have class_ids and returns the ones matching specific class_id.
 
+```js
+const persistents = require('persistents-with-classid');
+
+var iv1, iv2
+
+function onTimeout() {
+  clearInterval(iv1);
+}
+
+function Me() {}
+Me.prototype.timeout = function () {
+  clearInterval(iv2);
+}
+
+iv1 = setInterval(onTimeout, 20);
+iv2 = setInterval(new Me().timeout, 30);
+
+const result = persistents.collect();
+
+function inspect(obj, depth) {
+  console.error(require('util').inspect(obj, false, depth || 5, true));
+}
+
+inspect(result, 3);
+```
+
+### Output
+
+```
+{ '17':
+   [ Timer {
+       '0': [Function: listOnTimeout],
+       _idleNext:
+        { _called: false,
+          _idleTimeout: 20,
+          _idlePrev: [Circular],
+          _idleNext: [Circular],
+          _idleStart: 130,
+          _onTimeout: [Function: wrapper],
+          _repeat: [Function: onTimeout] },
+       _idlePrev:
+        { _called: false,
+          _idleTimeout: 20,
+          _idlePrev: [Circular],
+          _idleNext: [Circular],
+          _idleStart: 130,
+          _onTimeout: [Function: wrapper],
+          _repeat: [Function: onTimeout] },
+       msecs: 20 },
+     Timer {
+       '0': [Function: listOnTimeout],
+       _idleNext:
+        { _called: false,
+          _idleTimeout: 30,
+          _idlePrev: [Circular],
+          _idleNext: [Circular],
+          _idleStart: 130,
+          _onTimeout: [Function: wrapper],
+          _repeat: [Function] },
+       [ ... ]
+       msecs: 30 } ] }
+```
+
 <!-- START docme generated API please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN docme TO UPDATE -->
 
