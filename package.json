@@ -2,11 +2,11 @@
   "name": "persistents-with-classid",
   "version": "0.0.0",
   "description": "Iterates through all the persistent handles in the current isolate's heap that have class_ids and returns the ones matching specific class_id",
-  "main": "index.js",
+  "main": "persistents-with-classid.js",
   "scripts": {
     "build": "node-gyp rebuild",
     "docme": "docme README.md",
-    "test": "tape test/*.js"
+    "test": "set -e; for t in test/*.js; do node $t; done"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,7 @@
     "bindings": "~1.2.1"
   },
   "devDependencies": {
-    "docme": "~0.3.0",
-    "nave": "~0.4.3",
-    "tap": "~0.4.3"
+    "tape": "~4.2.0"
   },
   "keywords": [],
   "author": {

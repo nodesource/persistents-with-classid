@@ -30,7 +30,7 @@ inspect(result, 3);
 
 ### Output
 
-```
+```js
 { '17':
    [ Timer {
        '0': [Function: listOnTimeout],
@@ -63,6 +63,34 @@ inspect(result, 3);
           _repeat: [Function] },
        [ ... ]
        msecs: 30 } ] }
+```
+
+## Async Wrap Providers
+
+```js
+{ NONE               : 0,
+  CARES              : 1,
+  CONNECTWRAP        : 2,
+  CRYPTO             : 3,
+  FSEVENTWRAP        : 4,
+  FSREQWRAP          : 5,
+  GETADDRINFOREQWRAP : 6,
+  GETNAMEINFOREQWRAP : 7,
+  JSSTREAM           : 8,
+  PIPEWRAP           : 9,
+  PROCESSWRAP        : 10,
+  QUERYWRAP          : 11,
+  REQWRAP            : 12,
+  SHUTDOWNWRAP       : 13,
+  SIGNALWRAP         : 14,
+  STATWATCHER        : 15,
+  TCPWRAP            : 16,
+  TIMERWRAP          : 17,
+  TLSWRAP            : 18,
+  TTYWRAP            : 19,
+  UDPWRAP            : 20,
+  WRITEWRAP          : 21,
+  ZLIB               : 22 }
 ```
 
 <!-- START docme generated API please keep comment here to allow auto update -->
