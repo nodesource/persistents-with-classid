@@ -4,11 +4,6 @@ const binding = process.versions.nsolid
   ? process._linkedBinding('persistents_with_classid')
   : require('bindings')('persistents_with_classid');
 
-const async_wrap = process.binding('async_wrap');
-
-function getProviderValue(k) { return async_wrap.Providers[k] }
-const providerIds = Object.keys(async_wrap.Providers).map(getProviderValue);
-
 /**
  * Visits all persistents with class id and calls back with the ones that
  * the user is interested in.
@@ -20,8 +15,21 @@ const providerIds = Object.keys(async_wrap.Providers).map(getProviderValue);
  * @param {Array=} classIds filter of class ids of Objects to call back with, defaults to async_wrap providers
  */
 const visit = exports.visit = function visit(fn, classIds) {
-  classIds = classIds || providerIds;
-  binding.visit(fn, classIds);
+  if (typeof fn !== 'function')
+    throw new TypeError('First argument needs to be a Function');
+
+  if (!classIds)
+    return binding.visit(fn, -1 >>> 0);
+
+  if (!Array.isArray(classIds))
+    throw new TypeError('Second argument needs to be an Array');
+
+  let ids = 0;
+  for (let i = 0; i < classIds.length; i++) {
+    ids += classIds[i] << 1;
+  }
+
+  return binding.visit(fn, ids);
 }
 
 /**
