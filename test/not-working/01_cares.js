@@ -3,8 +3,8 @@
 const test = require('tape').test
 const dns = require('dns')
 const cares = process.binding('cares_wrap')
-const persistents = require('../')
-const provider = require('./util/get-provider')('CARES')
+const persistents = require('../../')
+const provider = require('../util/get-provider')('CARES')
 
 function inspect(obj, depth) {
   console.error(require('util').inspect(obj, false, depth || 5, true));

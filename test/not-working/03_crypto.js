@@ -1,7 +1,7 @@
 const test = require('tape').test
 const crypto = require('crypto')
-const persistents = require('../')
-const provider = require('./util/get-provider')('CRYPTO')
+const persistents = require('../../')
+const provider = require('../util/get-provider')('CRYPTO')
 
 function inspect(obj, depth) {
   console.error(require('util').inspect(obj, false, depth || 5, true));
