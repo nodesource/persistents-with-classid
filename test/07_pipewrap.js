@@ -12,7 +12,7 @@ function inspect(obj, depth) {
   console.error(require('util').inspect(obj, false, depth || 5, true));
 }
 
-test('\ngiven a spawned child process', function (t) {
+test('\npipewrap: given a spawned child process', function (t) {
   var sleep = spawn('sleep', [ '0.1' ])
 
   function onsleepClose(code) {
@@ -25,10 +25,7 @@ test('\ngiven a spawned child process', function (t) {
   // a child process gets a 3 pipes (sockets) installed for communication - std{in,err,out}
   const pipes = res[provider]
   t.equal(pipes.length, 3, 'three pipes')
-  t.ok(!pipes[STDIN].owner.readable, 'stdin not readable')
-  t.ok(pipes[STDIN].owner.writable, 'stdin writable')
-  t.ok(pipes[STDOUT].owner.readable, 'stdout readable')
-  t.ok(!pipes[STDOUT].owner.writable, 'stdout not writable')
-  t.ok(pipes[STDERR].owner.readable, 'stderr readable')
-  t.ok(!pipes[STDERR].owner.writable, 'stderr not writable')
+  pipes.forEach(function (p) {
+    t.equal(Object.getPrototypeOf(p).constructor.name, 'Pipe', 'pipe constructor')
+  })
 })

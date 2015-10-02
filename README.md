@@ -67,30 +67,32 @@ inspect(result, 3);
 
 ## Async Wrap Providers
 
+**NOTE**: that these got updated after `v4.1.1` and are still pending a release
+
 ```js
-{ NONE               : 0,
-  CARES              : 1,
-  CONNECTWRAP        : 2,
-  CRYPTO             : 3,
-  FSEVENTWRAP        : 4,
-  FSREQWRAP          : 5,
-  GETADDRINFOREQWRAP : 6,
-  GETNAMEINFOREQWRAP : 7,
-  JSSTREAM           : 8,
-  PIPEWRAP           : 9,
-  PROCESSWRAP        : 10,
-  QUERYWRAP          : 11,
-  REQWRAP            : 12,
-  SHUTDOWNWRAP       : 13,
-  SIGNALWRAP         : 14,
-  STATWATCHER        : 15,
-  TCPWRAP            : 16,
-  TIMERWRAP          : 17,
-  TLSWRAP            : 18,
-  TTYWRAP            : 19,
-  UDPWRAP            : 20,
-  WRITEWRAP          : 21,
-  ZLIB               : 22 }
+{ NONE: 0,
+  CRYPTO: 1,
+  FSEVENTWRAP: 2,
+  FSREQWRAP: 3,
+  GETADDRINFOREQWRAP: 4,
+  GETNAMEINFOREQWRAP: 5,
+  JSSTREAM: 6,
+  PIPEWRAP: 7,
+  PIPECONNECTWRAP: 8,
+  PROCESSWRAP: 9,
+  QUERYWRAP: 10,
+  SHUTDOWNWRAP: 11,
+  SIGNALWRAP: 12,
+  STATWATCHER: 13,
+  TCPWRAP: 14,
+  TCPCONNECTWRAP: 15,
+  TIMERWRAP: 16,
+  TLSWRAP: 17,
+  TTYWRAP: 18,
+  UDPWRAP: 19,
+  UDPSENDWRAP: 20,
+  WRITEWRAP: 21,
+  ZLIB: 22 }
 ```
 
 <!-- START docme generated API please keep comment here to allow auto update -->
