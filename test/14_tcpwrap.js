@@ -10,7 +10,7 @@ test('\ntcpwrap: net.createServer', function (t) {
   const server = net.createServer().listen(PORT);
 
   const res = persistents.collect()[provider]
-  t.equal(res.length, 1, 'one pipeconnectwrap')
+  t.equal(res.length, 1, 'one tcpwrap')
   t.equal(res[0].owner._connectionKey, '6::::3000', 'the server we created')
   server.close(t.end)
 })
