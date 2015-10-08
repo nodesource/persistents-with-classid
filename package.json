@@ -5,7 +5,7 @@
   "main": "persistents-with-classid.js",
   "scripts": {
     "build": "node-gyp rebuild",
-    "docme": "docme README.md",
+    "docme": "docme README.md -- --configure .jsdocrc",
     "test": "set -e; for t in test/*.js; do node $t; done"
   },
   "repository": {

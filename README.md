@@ -143,7 +143,7 @@ inspect(result, 3);
 <li>
 <a href="https://github.com/nodesource/persistents-with-classid/blob/master/persistents-with-classid.js">persistents-with-classid.js</a>
 <span>, </span>
-<a href="https://github.com/nodesource/persistents-with-classid/blob/master/persistents-with-classid.js#L27">lineno 27</a>
+<a href="https://github.com/nodesource/persistents-with-classid/blob/master/persistents-with-classid.js#L35">lineno 35</a>
 </li>
 </ul></dd>
 </dl>
@@ -208,7 +208,7 @@ with signature: <code>callback(classid, object)</code></p></td>
 <li>
 <a href="https://github.com/nodesource/persistents-with-classid/blob/master/persistents-with-classid.js">persistents-with-classid.js</a>
 <span>, </span>
-<a href="https://github.com/nodesource/persistents-with-classid/blob/master/persistents-with-classid.js#L12">lineno 12</a>
+<a href="https://github.com/nodesource/persistents-with-classid/blob/master/persistents-with-classid.js#L7">lineno 7</a>
 </li>
 </ul></dd>
 </dl>
