@@ -26,7 +26,7 @@ const visit = exports.visit = function visit(fn, classIds) {
 
   let ids = 0;
   for (let i = 0; i < classIds.length; i++) {
-    ids += classIds[i] << 1;
+    ids += 1 << classIds[i];
   }
 
   return binding.visit(fn, ids);

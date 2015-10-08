@@ -49,7 +49,7 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
       if (class_id >= 0xA1C && class_id < 0xA1C + 100)
         class_id = class_id - 0xA1C;
 
-      if (!((class_id << 1) && ids_))
+      if (!((1 << class_id) & ids_))
         return;
 
       Local<Value> obj = PersistentToLocal(isolate, value);
