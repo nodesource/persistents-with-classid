@@ -8,6 +8,11 @@ const provider = require('./util/get-provider')('TLSWRAP')
 const PORT = 3000
 const fixturesDir = __dirname + '/fixtures';
 
+function resWithServer(results) {
+  for (let i = 0; i < results.length; i++)
+    if (results[i].owner && results[i].owner.server) return results[i]
+}
+
 test('\ntlswrap: tls.creatServer then tls.connect ', function (t) {
   const options = {
     key: fs.readFileSync(fixturesDir + '/ec-key.pem'),
@@ -23,7 +28,7 @@ test('\ntlswrap: tls.creatServer then tls.connect ', function (t) {
   function onconnected() {
     const res = persistents.collect()[provider]
     t.equal(res.length, 2, 'after connected two tlswraps')
-    t.equal(res[0].owner.server.key, options.key, 'the first one is the server we created')
+    t.equal(resWithServer(res).owner.server.key, options.key, 'the first one is the server we created')
     this.destroy()
     server.close(t.end)
   }
