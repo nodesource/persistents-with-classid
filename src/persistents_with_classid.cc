@@ -42,7 +42,8 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
     virtual void VisitPersistentHandle(Persistent<Value>* value,
                                        uint16_t class_id) {
       Isolate* isolate = Isolate::GetCurrent();
-      HandleScope handle_scope(isolate);
+      // HandleScope handle_scope(isolate);
+      v8::EscapableHandleScope handle_scope(isolate);
       Local<Function> fn = PersistentToLocal(isolate, &fn_p_).As<Function>();
 
       // class_id adjustment for AsyncWrap
@@ -52,7 +53,7 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
       if (!((1 << class_id) & ids_))
         return;
 
-      Local<Value> obj = PersistentToLocal(isolate, value);
+      Local<Value> obj = handle_scope.Escape(PersistentToLocal(isolate, value));
 
       if (obj.IsEmpty())
         return;
