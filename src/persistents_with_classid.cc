@@ -11,6 +11,7 @@ using v8::Local;
 using v8::Object;
 using v8::Persistent;
 using v8::PersistentHandleVisitor;
+using v8::String;
 using v8::Uint32;
 using v8::Value;
 using v8::V8;
@@ -24,6 +25,16 @@ inline Local<TypeName> PersistentToLocal(Isolate* isolate,
     return *reinterpret_cast<Local<TypeName>*>(
         const_cast<Persistent<TypeName>*>(pst));
   }
+}
+
+static Local<Value> CleanseFd(Isolate* isolate, Local<Object> obj) {
+    Local<String> fd = String::NewFromUtf8(isolate, "fd");
+    if (!obj->Has(fd)) return obj;
+    // TODO: Do I need to escape clone from the scope .. do I need a scope in this function?
+    Local<Object> clone = obj->Clone();
+    // TODO: Do I need to escape that integer?
+    clone->ForceSet(fd, Integer::New(isolate, -1));
+    return clone;
 }
 
 class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
@@ -56,6 +67,10 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
 
       if (obj.IsEmpty())
         return;
+
+      // prevent crashes due to improper fd access
+      // TODO: is the ->ToObject cast always valid?
+      obj = CleanseFd(isolate, obj->ToObject());
 
       Local<Value> argv[] = {
         Integer::New(isolate, class_id),
