@@ -2,6 +2,12 @@
 
 Iterates through all the persistent handles in the current isolate's heap that have class_ids and returns the ones matching specific class_id.
 
+## Installation
+
+    npm install persistents-with-classid
+
+## Example
+
 ```js
 const persistents = require('persistents-with-classid');
 
@@ -65,35 +71,7 @@ inspect(result, 3);
        msecs: 30 } ] }
 ```
 
-## Async Wrap Providers
-
-**NOTE**: that these got updated after `v4.1.1` and are still pending a release
-
-```js
-{ NONE: 0,
-  CRYPTO: 1,
-  FSEVENTWRAP: 2,
-  FSREQWRAP: 3,
-  GETADDRINFOREQWRAP: 4,
-  GETNAMEINFOREQWRAP: 5,
-  JSSTREAM: 6,
-  PIPEWRAP: 7,
-  PIPECONNECTWRAP: 8,
-  PROCESSWRAP: 9,
-  QUERYWRAP: 10,
-  SHUTDOWNWRAP: 11,
-  SIGNALWRAP: 12,
-  STATWATCHER: 13,
-  TCPWRAP: 14,
-  TCPCONNECTWRAP: 15,
-  TIMERWRAP: 16,
-  TLSWRAP: 17,
-  TTYWRAP: 18,
-  UDPWRAP: 19,
-  UDPSENDWRAP: 20,
-  WRITEWRAP: 21,
-  ZLIB: 22 }
-```
+## API
 
 <!-- START docme generated API please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN docme TO UPDATE -->
@@ -222,6 +200,59 @@ with signature: <code>callback(classid, object)</code></p></td>
 </div>
 <!-- END docme generated API please keep comment here to allow auto update -->
 
-## LICENSE
+## Async Wrap Providers
 
-MIT
+```js
+{ NONE: 0,
+  CRYPTO: 1,
+  FSEVENTWRAP: 2,
+  FSREQWRAP: 3,
+  GETADDRINFOREQWRAP: 4,
+  GETNAMEINFOREQWRAP: 5,
+  JSSTREAM: 6,
+  PIPEWRAP: 7,
+  PIPECONNECTWRAP: 8,
+  PROCESSWRAP: 9,
+  QUERYWRAP: 10,
+  SHUTDOWNWRAP: 11,
+  SIGNALWRAP: 12,
+  STATWATCHER: 13,
+  TCPWRAP: 14,
+  TCPCONNECTWRAP: 15,
+  TIMERWRAP: 16,
+  TLSWRAP: 17,
+  TTYWRAP: 18,
+  UDPWRAP: 19,
+  UDPSENDWRAP: 20,
+  WRITEWRAP: 21,
+  ZLIB: 22 }
+```
+ 
+## Contributing
+
+To submit a bug report, please create an [issue at GitHub][].
+
+If you'd like to contribute code to this project, please read the
+[CONTRIBUTING.md][] document.
+
+## Authors and Contributors
+
+<table><tbody>
+  <tr>
+    <th align="left">Thorsten Lorenz</th>
+    <td><a href="https://github.com/thlorenz">GitHub/thlorenz</a></td>
+    <td><a href="https://twitter.com/thlorenz">Twitter/@thlorenz</a></td>
+  </tr>
+</tbody></table>
+
+
+## License & Copyright
+
+**persistents-with-classid** is Copyright (c) 2016 NodeSource and licensed under the
+MIT license. All rights not explicitly granted in the MIT license are reserved.
+See the included [LICENSE.md][] file for more details.
+
+
+[issue at GitHub]: https://github.com/nodesource/persistents-with-classid/issues
+[CONTRIBUTING.md]: CONTRIBUTING.md
+[LICENSE.md]: LICENSE.md

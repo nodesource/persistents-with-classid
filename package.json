@@ -21,14 +21,16 @@
   },
   "keywords": [],
   "author": {
+    "name": "NodeSource",
+    "email": "npm@nodesource.com",
+    "url": "https://nodesource.com"
+  },
+  "contributors": [ {
     "name": "Thorsten Lorenz",
     "email": "thlorenz@gmx.de",
     "url": "http://thlorenz.com"
-  },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/nodesource/persistents-with-classid/blob/master/LICENSE"
-  },
+  } ],
+  "license": "MIT",
   "engine": {
     "node": ">=0.12"
   }
