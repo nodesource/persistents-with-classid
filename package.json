@@ -1,6 +1,6 @@
 {
   "name": "persistents-with-classid",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Iterates through all the persistent handles in the current isolate's heap that have class_ids and returns the ones matching specific class_id",
   "main": "persistents-with-classid.js",
   "scripts": {
@@ -25,11 +25,13 @@
     "email": "npm@nodesource.com",
     "url": "https://nodesource.com"
   },
-  "contributors": [ {
-    "name": "Thorsten Lorenz",
-    "email": "thlorenz@gmx.de",
-    "url": "http://thlorenz.com"
-  } ],
+  "contributors": [
+    {
+      "name": "Thorsten Lorenz",
+      "email": "thlorenz@gmx.de",
+      "url": "http://thlorenz.com"
+    }
+  ],
   "license": "MIT",
   "engine": {
     "node": ">=0.12"
