@@ -3,6 +3,8 @@
 const test = require('tape').test
 var dgram = require('dgram')
 const async_wrap = process.binding('async_wrap');
+const compat = require('./util/compat')
+const setupHooks = compat.setupHooks
 const persistents = require('../')
 const provider = require('./util/get-provider')('UDPSENDWRAP')
 const PORT = 3000
@@ -12,8 +14,8 @@ function inspect(obj, depth) {
 }
 
 test('\nudpsendwrap: dgram.createSocket().bind(PORT) then .send(', function (t) {
-  function init(id) {
-    if (id === provider) {
+  function init(id, p) {
+    if (p === provider) {
       const res = persistents.collect()[provider]
       // we cannot under any circumstance throw inside async_wrap init
       // so let's check the result in the next event loop ;)
@@ -27,9 +29,8 @@ test('\nudpsendwrap: dgram.createSocket().bind(PORT) then .send(', function (t) 
     t.end()
   }
 
-  function noop() {}
   // only way to catch udpsendwrap is by hooking into async_wrap
-  async_wrap.setupHooks(init, noop, noop);
+  setupHooks(init);
   async_wrap.enable();
 
   dgram.createSocket('udp4').bind(PORT, function onbound() {

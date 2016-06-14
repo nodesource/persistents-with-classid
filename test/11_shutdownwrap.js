@@ -3,6 +3,8 @@
 const test = require('tape').test
 const net = require('net')
 const async_wrap = process.binding('async_wrap');
+const compat = require('./util/compat')
+const setupHooks = compat.setupHooks
 const persistents = require('../')
 const provider = require('./util/get-provider')('SHUTDOWNWRAP')
 const PORT = 3000
@@ -10,16 +12,15 @@ const PORT = 3000
 // Not only is SHUTDOWNWRAP used when the process exits, but
 // TCP connections will also use a SHUTDOWNWRAP when the connection is closed.
 test('\nshutdownwrap: net.createServer and net.connect -> waiting for connection to close', function (t) {
-  function init(id) {
-    if (id === provider) {
+  function init(id, p) {
+    if (p === provider) {
       const res = persistents.collect()[provider]
       setImmediate(check.bind(null, res))
     }
   }
 
-  function noop() {}
   // only way to catch writewrap is by hooking into async_wrap
-  async_wrap.setupHooks(init, noop, noop);
+  setupHooks(init);
   async_wrap.enable();
 
   net.createServer(function(c) {
