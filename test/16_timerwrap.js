@@ -3,12 +3,13 @@
 const test = require('tape').test
 const persistents = require('../')
 const provider = require('./util/get-provider')('TIMERWRAP')
+const idleNext = require('./util/compat').idleNext
 const TIMEOUT = 20
 const TIMEOUT_PLUS = 20 + 5
 
 function withMsecs(ms) {
   return function filter(x) {
-    return x.msecs === ms
+    return (x.msecs || x._list.msecs) === ms
   }
 }
 
@@ -34,7 +35,7 @@ test('\none setTimeout', function (t) {
     const res = persistents.collect()
     const timer = res[provider].filter(withMsecs(TIMEOUT))[0]
 
-    t.equal(timer._idleNext._onTimeout, timeout, 'includes timer')
+    t.equal(idleNext(timer)._onTimeout, timeout, 'includes timer')
   }
 })
 
@@ -51,8 +52,8 @@ test('\ntwo setTimeouts', function (t) {
     const timerUno = res[provider].filter(withMsecs(TIMEOUT))[0]
     const timerDos = res[provider].filter(withMsecs(TIMEOUT_PLUS))[0]
 
-    t.equal(timerUno._idleNext._onTimeout, timeoutUno, 'includes first timer')
-    t.equal(timerDos._idleNext._onTimeout, timeoutDos, 'includes second timer')
+    t.equal(idleNext(timerUno)._onTimeout, timeoutUno, 'includes first timer')
+    t.equal(idleNext(timerDos)._onTimeout, timeoutDos, 'includes second timer')
   }
 })
 
@@ -67,7 +68,7 @@ test('\none setInterval', function (t) {
     const res = persistents.collect()
     const timer = res[provider].filter(withMsecs(TIMEOUT))[0]
 
-    t.equal(timer._idleNext._repeat, interval, 'includes timer')
+    t.equal(idleNext(timer)._repeat, interval, 'includes timer')
   }
 })
 
@@ -88,7 +89,7 @@ test('\ntwo setIntervals', function (t) {
     const timerUno = res[provider].filter(withMsecs(TIMEOUT))[0]
     const timerDos = res[provider].filter(withMsecs(TIMEOUT_PLUS))[0]
 
-    t.equal(timerUno._idleNext._repeat, intervalUno, 'includes first timer')
-    t.equal(timerDos._idleNext._repeat, intervalDos, 'includes second timer')
+    t.equal(idleNext(timerUno)._repeat, intervalUno, 'includes first timer')
+    t.equal(idleNext(timerDos)._repeat, intervalDos, 'includes second timer')
   }
 })
