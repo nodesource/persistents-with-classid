@@ -1,5 +1,6 @@
 #include <v8.h>
 #include <node.h>
+#include <vector>
 
 using v8::Function;
 using v8::FunctionCallbackInfo;
@@ -15,6 +16,11 @@ using v8::Uint32;
 using v8::Value;
 using v8::V8;
 
+#ifndef assert
+// make some nervous IDEs/vim plugins happy
+void assert(bool);
+#endif
+
 template <class TypeName>
 inline Local<TypeName> PersistentToLocal(Isolate* isolate,
                                          const Persistent<TypeName>* pst) {
@@ -25,6 +31,31 @@ inline Local<TypeName> PersistentToLocal(Isolate* isolate,
         const_cast<Persistent<TypeName>*>(pst));
   }
 }
+
+class PersistentHandleWithClassId {
+  public:
+    PersistentHandleWithClassId(Isolate* isolate, uint32_t id, Local<Object> value)
+      : id_(id){
+      obj_p_.Reset(isolate, value);
+    }
+
+    ~PersistentHandleWithClassId() {
+      obj_p_.Reset();
+    }
+
+    Local<Object> value() {
+      return PersistentToLocal(isolate_, &obj_p_);
+    }
+
+    uint32_t id() {
+      return id_;
+    }
+
+  private:
+    uint32_t id_;
+    Persistent<Object> obj_p_;
+    Isolate* isolate_;
+};
 
 class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
   public:
@@ -37,13 +68,13 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
 
     ~PersistentHandleWithClassIdVisitor() {
       fn_p_.Reset();
+      handles_.clear();
     }
 
     virtual void VisitPersistentHandle(Persistent<Value>* value,
                                        uint16_t class_id) {
       Isolate* isolate = Isolate::GetCurrent();
       HandleScope handle_scope(isolate);
-      Local<Function> fn = PersistentToLocal(isolate, &fn_p_).As<Function>();
 
       // class_id adjustment for AsyncWrap
       if (class_id >= 0xA1C && class_id < 0xA1C + 100)
@@ -52,22 +83,36 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
       if (!((1 << class_id) & ids_))
         return;
 
-      Local<Value> obj = PersistentToLocal(isolate, value);
+      Local<Value> val = PersistentToLocal(isolate, value);
 
-      if (obj.IsEmpty())
+      if (val.IsEmpty() || !val->IsObject())
         return;
 
-      Local<Value> argv[] = {
-        Integer::New(isolate, class_id),
-        obj
-      };
+      Local<Object> obj = val.As<Object>();
+      add_(isolate, class_id, obj);
+    }
 
-      fn->Call(Null(Isolate::GetCurrent()), 2, argv);
+    void report_handles(Isolate* isolate) {
+      Local<Function> fn = PersistentToLocal(isolate, &fn_p_).As<Function>();
+      for (auto h : handles_) {
+        report_(isolate, fn, h);
+      }
     }
 
   private:
     Persistent<Function> fn_p_;
     const uint32_t ids_;
+    std::vector<PersistentHandleWithClassId*> handles_;
+
+    void add_(Isolate* isolate, uint32_t id, Local<Object> value) {
+      PersistentHandleWithClassId* handle = new PersistentHandleWithClassId(isolate, id, value);
+      handles_.push_back(handle);
+    }
+
+    void report_(Isolate* isolate, Local<Function> fn, PersistentHandleWithClassId* handle) {
+      Local<Value> argv[] = { Integer::New(isolate, handle->id()), handle->value() };
+      fn->Call(Null(isolate), 2, argv);
+    }
 };
 
 static void Visit(const FunctionCallbackInfo<Value>& info) {
@@ -79,7 +124,11 @@ static void Visit(const FunctionCallbackInfo<Value>& info) {
   PersistentHandleWithClassIdVisitor visitor(isolate,
                                              info[0].As<Function>(),
                                              info[1]->Uint32Value());
-  V8::VisitHandlesWithClassIds(isolate, &visitor);
+  // This function introduced with v8 v3.30.37 upgrade Nov 13, 2014
+  // (https://github.com/nodesource/nsolid-node/commit/5d1b6d3e0fa4b97a490ef964be48aed9872e3ec1)
+  // before that it was V8::VisitHandlesWithClassIds(isolate, &visitor).
+  isolate->VisitHandlesWithClassIds(&visitor);
+  visitor.report_handles(isolate);
 }
 
 static void InitVisitor(Handle<Object> exports) {
