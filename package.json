@@ -1,6 +1,6 @@
 {
   "name": "persistents-with-classid",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Iterates through all the persistent handles in the current isolate's heap that have class_ids and returns the ones matching specific class_id",
   "main": "persistents-with-classid.js",
   "scripts": {
