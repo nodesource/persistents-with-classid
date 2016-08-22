@@ -68,6 +68,9 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
 
     ~PersistentHandleWithClassIdVisitor() {
       fn_p_.Reset();
+      for (auto h : handles_) {
+        delete h;
+      }
       handles_.clear();
     }
 
