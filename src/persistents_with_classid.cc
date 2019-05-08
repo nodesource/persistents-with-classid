@@ -4,7 +4,6 @@
 
 using v8::Function;
 using v8::FunctionCallbackInfo;
-using v8::Handle;
 using v8::HandleScope;
 using v8::Integer;
 using v8::Isolate;
@@ -113,20 +112,22 @@ class PersistentHandleWithClassIdVisitor : public PersistentHandleVisitor {
     }
 
     void report_(Isolate* isolate, Local<Function> fn, PersistentHandleWithClassId* handle) {
+      Local<v8::Context> context = isolate->GetCurrentContext();
       Local<Value> argv[] = { Integer::New(isolate, handle->id()), handle->value() };
-      fn->Call(Null(isolate), 2, argv);
+      fn->Call(context, Null(isolate), 2, argv);
     }
 };
 
 static void Visit(const FunctionCallbackInfo<Value>& info) {
   Isolate* isolate = info.GetIsolate();
+  Local<v8::Context> context = isolate->GetCurrentContext();
 
   assert(info[0]->IsFunction());
   assert(info[1]->IsUint32());
 
   PersistentHandleWithClassIdVisitor visitor(isolate,
                                              info[0].As<Function>(),
-                                             info[1]->Uint32Value());
+                                             info[1]->Uint32Value(context).ToChecked());
   // This function introduced with v8 v3.30.37 upgrade Nov 13, 2014
   // (https://github.com/nodesource/nsolid-node/commit/5d1b6d3e0fa4b97a490ef964be48aed9872e3ec1)
   // before that it was V8::VisitHandlesWithClassIds(isolate, &visitor).
@@ -134,7 +135,7 @@ static void Visit(const FunctionCallbackInfo<Value>& info) {
   visitor.report_handles(isolate);
 }
 
-static void InitVisitor(Handle<Object> exports) {
+static void InitVisitor(Local<Object> exports) {
   NODE_SET_METHOD(exports, "visit", Visit);
 }
 
